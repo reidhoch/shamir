@@ -35,7 +35,7 @@ jobs:
         run: |
           poetry run pytest --junit-xml=junit/test-results-${{ matrix.python-version }}.xml --cov=shamir --cov-branch --cov-report=xml -n auto
       - name: Code Coverage
-        uses: codecov/codecov-action@968872560f81e7bdde9272853e65f2507c0eca7c # v5.0.0
+        uses: codecov/codecov-action@5c47607acb93fed5485fdbf7232e8a31425f672a # v5.0.2
         with:
           files: coverage.xml
           flags: unittests
