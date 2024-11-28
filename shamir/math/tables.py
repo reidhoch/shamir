@@ -1,3 +1,5 @@
+"""Contains the logarithm and exponentiation tables."""
+
 from typing import Final
 
 LOG_TABLE: Final[list[int]] = [

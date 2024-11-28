@@ -2,6 +2,7 @@
 
 from random import Random, SystemRandom
 
+from shamir.errors import Error
 from shamir.math import add, div, mul
 
 __all__: list[str] = ["Polynomial", "interpolate"]
@@ -18,7 +19,7 @@ class Polynomial:
     ) -> None:
         """Random polynomial of given degree with the provided intercept value."""
         if not rng:
-            raise ValueError("RNG not initialized")
+            raise ValueError(Error.UNINITIALIZED_RNG)
         self.coefficients: bytearray = bytearray(degree + 1)
         # Ensure the intercept is set
         self.coefficients[0] = intercept

@@ -1,22 +1,29 @@
 """Python implementation of Shamir's Secret Sharing."""
 
 from random import Random, SystemRandom
+from typing import Final
 
 from shamir.utils import Polynomial, interpolate
 
+from .errors import Error
+
 __all__: list[str] = ["combine", "split"]
+
+TWO: Final[int] = 2
+MAX_PARTS: Final[int] = 255
+MAX_THRESHOLD: Final[int] = 255
 
 
 def combine(parts: list[bytearray]) -> bytearray:
     """Combine is used to reconstruct a secret once a threshold is reached."""
-    if len(parts) < 2:
-        raise ValueError("Less than two parts cannot be used to reconstruct the secret")
+    if len(parts) < TWO:
+        raise ValueError(Error.LESS_THAN_TWO_PARTS)
     first_part_len: int = len(parts[0])
-    if first_part_len < 2:
-        raise ValueError("Parts must be at least two bytes")
+    if first_part_len < TWO:
+        raise ValueError(Error.PARTS_MUST_BE_TWO_BYTES)
     for part in parts:
         if len(part) != first_part_len:
-            raise ValueError("All parts must be the same length")
+            raise ValueError(Error.ALL_PARTS_MUST_BE_SAME_LENGTH)
 
     secret: bytearray = bytearray(first_part_len - 1)
     x_s: bytearray = bytearray(len(parts))
@@ -26,7 +33,7 @@ def combine(parts: list[bytearray]) -> bytearray:
     for i, part in enumerate(parts):
         sample: int = part[first_part_len - 1]
         if sample in check_map:
-            raise ValueError("Duplicate part detected")
+            raise ValueError(Error.DUPLICATE_PART)
         check_map[sample] = True
         x_s[i] = sample
 
@@ -45,21 +52,20 @@ def split(
     threshold: int,
     rng: Random = SystemRandom(),  # noqa: B008
 ) -> list[bytearray]:
-    """
-    Split an arbitrarily long secret into a number of parts.
+    """Split an arbitrarily long secret into a number of parts.
 
     A threshold of which are required to reconstruct the secret.
     """
     if parts < threshold:
-        raise ValueError("Parts cannot be less than threshold")
-    if parts > 255 or threshold > 255:
-        raise ValueError("Parts or Threshold cannot exceed 255")
-    if threshold < 2:
-        raise ValueError("Threshold must be at least 2")
+        raise ValueError(Error.PARTS_CANNOT_BE_LESS_THAN_THRESHOLD)
+    if parts > MAX_PARTS or threshold > MAX_THRESHOLD:
+        raise ValueError(Error.PARTS_OR_THRESHOLD_CANNOT_EXCEED_255)
+    if threshold < TWO:
+        raise ValueError(Error.THRESHOLD_MUST_BE_AT_LEAST_2)
     if len(secret) == 0:
-        raise ValueError("Cannot split an empty secret")
+        raise ValueError(Error.CANNOT_SPLIT_EMPTY_SECRET)
     if not rng:
-        raise ValueError("RNG not initialized")
+        raise ValueError(Error.UNINITIALIZED_RNG)
 
     # Generate a random list of x coordinates.
     x_coords: list[int] = [rng.randrange(0, 255) for _ in range(1, 256)]

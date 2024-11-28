@@ -6,7 +6,7 @@ from typing import Final
 
 from .tables import EXP_TABLE, LOG_TABLE
 
-__all__: list[str] = ["add", "div", "mul", "EXP_TABLE", "LOG_TABLE"]
+__all__: list[str] = ["EXP_TABLE", "LOG_TABLE", "add", "div", "mul"]
 ZERO: Final[bytes] = b"\x00"
 
 
