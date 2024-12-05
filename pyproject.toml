@@ -43,7 +43,7 @@ pytest-cov = "^6.0"
 pytest-xdist = { extras = ["psutil"], version = "^3.6" }
 ruff = "^0.8.1"
 tox = "^4.23"
-typer = { extras = ["all"], version = "^0.15.0" }
+typer = { extras = ["all"], version = "^0.15.1" }
 
 [tool.ruff]
 line-length = 88
