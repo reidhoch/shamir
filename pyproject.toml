@@ -51,6 +51,9 @@ extend-exclude = ["examples", "tests"]
 lint.select = ["ALL"]
 target-version = 'py311'
 
+[tool.ruff.lint.per-file-ignores]
+"shamir/math/__init__.py" = ["A005"]
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
